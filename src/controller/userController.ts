@@ -33,6 +33,15 @@ const importUser = async (req: Request, res: Response) => {
     const jsonArray = await csv().fromFile(req.file.path);
 
     console.log(jsonArray);
+    for (let x = 0; x < jsonArray.length; x++) {
+      userData.push({
+        name: jsonArray[x].Name,
+        email: jsonArray[x].Email,
+        mobile: jsonArray[x].Phone,
+      });
+    }
+
+    await User.insertMany(userData);
 
     res.status(200).send({ success: true, msg: "CSV Imported" });
   } catch (error) {

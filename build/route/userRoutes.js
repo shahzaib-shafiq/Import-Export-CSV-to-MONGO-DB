@@ -21,7 +21,8 @@ var storage = multer_1.default.diskStorage({
         cb(null, file.originalname);
     },
 });
-var upload = (0, multer_1.default)({ storage: storage });
+// var upload = multer({ storage: storage });
+const upload = (0, multer_1.default)({ dest: "uploads/" });
 // Define your routes here
 router.post("/importUser", upload.single("file"), userController_1.default);
 exports.default = router;
