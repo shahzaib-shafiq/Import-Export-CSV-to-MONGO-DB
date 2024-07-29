@@ -20,8 +20,8 @@ var storage = multer.diskStorage({
   },
 });
 
-var upload = multer({ storage: storage });
-
+// var upload = multer({ storage: storage });
+const upload = multer({ dest: "uploads/" });
 // Define your routes here
 
 router.post("/importUser", upload.single("file"), importUser);
