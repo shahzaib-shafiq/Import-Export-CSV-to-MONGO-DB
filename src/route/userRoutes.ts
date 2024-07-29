@@ -1,9 +1,11 @@
-import bodyParser from "body-parser";
 import express from "express";
-
+const router = express.Router();
+import bodyParser from "body-parser";
 import multer from "multer";
 //const path = require("path");
 import path from "path";
+import importUser from "../controller/userController";
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -11,7 +13,7 @@ app.use(express.static(path.resolve(__dirname, "public")));
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../public/uploads");
+    cb(null, "./public/uploads");
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -20,8 +22,8 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-const userController = require("../controller/userController");
+// Define your routes here
 
-app.post("/importUser", upload.single("file"), userController.importUser);
+router.post("/importUser", upload.single("file"), importUser);
 
-module.exports = app;
+export default router;

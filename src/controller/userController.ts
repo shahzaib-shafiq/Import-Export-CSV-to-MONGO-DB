@@ -1,11 +1,11 @@
-const importUser = async (req, res) => {
+import { Request, Response } from "express";
+
+const importUser = async (req: Request, res: Response) => {
   try {
-    res.send({ status: 400, sucess: true, msg: "Running" });
+    res.status(200).send({ success: true, msg: "Running" });
   } catch (error) {
-    res.send({ status: 400, sucess: false, msg: "Error" });
+    res.status(400).send({ success: false, msg: "Error" });
   }
 };
 
-module.exports = {
-  importUser,
-};
+export default importUser;
