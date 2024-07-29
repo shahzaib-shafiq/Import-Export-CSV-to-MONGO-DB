@@ -1,7 +1,4 @@
 "use strict";
-// import { Request, response, Response } from "express";
-// import csv from "csvtojson";
-// import User from "../models/User";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -29,7 +26,7 @@ const importUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             userData.push({
                 name: jsonArray[x].Name,
                 email: jsonArray[x].Email,
-                mobile: jsonArray[x].Mobile,
+                mobile: jsonArray[x].Phone,
             });
         }
         yield User_1.default.insertMany(userData);
@@ -37,6 +34,29 @@ const importUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     catch (error) {
         console.error(error);
+        res.status(400).send({ success: false, msg: "Error processing file" });
+    }
+});
+const exportUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // var userData = [];
+        // if (!req.file || !req.file.path) {
+        //   return res.status(400).send({ success: false, msg: "No file uploaded" });
+        // }
+        // const jsonArray = await csv().fromFile(req.file.path);
+        // console.log(jsonArray);
+        // for (let x = 0; x < jsonArray.length; x++) {
+        //   userData.push({
+        //     name: jsonArray[x].Name,
+        //     email: jsonArray[x].Email,
+        //     mobile: jsonArray[x].Phone,
+        //   });
+        // }
+        // await User.insertMany(userData);
+        // res.status(200).send({ success: true, msg: "CSV Imported" });
+    }
+    catch (error) {
+        // console.error(error);
         res.status(400).send({ success: false, msg: "Error processing file" });
     }
 });

@@ -1,26 +1,7 @@
-// import { Request, response, Response } from "express";
-// import csv from "csvtojson";
-// import User from "../models/User";
-
-// const importUser = async (req: Request, res: Response) => {
-//   try {
-//     csv()
-//       .fromFile(req.file.path)
-//       .then((response) => {
-//         console.log(response);
-//       });
-
-//     res.status(200).send({ success: true, msg: "CSV Imported" });
-//   } catch (error) {
-//     res.status(400).send({ success: false, msg: "Error" });
-//   }
-// };
-
-// export default importUser;
-
 import { Request, Response } from "express";
 import csv from "csvtojson";
 import User from "../models/User";
+import { json2csv } from "json-2-csv";
 
 const importUser = async (req: Request, res: Response) => {
   try {
@@ -37,7 +18,7 @@ const importUser = async (req: Request, res: Response) => {
       userData.push({
         name: jsonArray[x].Name,
         email: jsonArray[x].Email,
-        mobile: jsonArray[x].Phone,
+        phone: jsonArray[x].Phone,
       });
     }
 
@@ -50,4 +31,34 @@ const importUser = async (req: Request, res: Response) => {
   }
 };
 
-export default importUser;
+const exportUser = async (req: Request, res: Response) => {
+  try {
+    let users: Array<{
+      id: string;
+      name: string;
+      email: string;
+      phone: number;
+    }> = [];
+    const userData = await User.find({});
+
+    userData.forEach((user) => {
+      const { id, name, email, phone } = user;
+      users.push({ id, name, email, phone });
+    });
+
+    // Define CSV fields
+    const csvFields = ["id", "name", "email", "phone"];
+
+    // Convert JSON to CSV
+    const csvData = await json2csv(users, { keys: csvFields });
+
+    // Send the CSV file in response
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment;filename=usersData.csv");
+    res.status(200).send(csvData);
+  } catch (error) {
+    console.error("Error exporting users:", error); // Log the error for debugging
+    res.status(400).send({ success: false, msg: "Error processing file" });
+  }
+};
+export { importUser, exportUser };
